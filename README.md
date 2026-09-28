@@ -1,97 +1,100 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Ứng dụng Quản lý Sinh viên (React Native)
 
-# Getting Started
+Ứng dụng Quản lý sinh viên di động được phát triển bằng **React Native**, **TypeScript**, và **React Navigation**, đáp ứng đầy đủ các yêu cầu quản lý thông tin sinh viên theo mô hình CRUD (Thêm, Xem, Sửa, Xóa) cùng tính năng tìm kiếm và xếp loại học lực tự động.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+---
 
-## Step 1: Start Metro
+## 📱 Các Màn hình trong Ứng dụng
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+1. **Màn hình Danh sách Sinh viên (`StudentListScreen`)**:
+   - Sử dụng `FlatList` để hiển thị danh sách thẻ sinh viên mượt mà, tối ưu hiệu năng.
+   - Hiển thị đầy đủ thông tin: Mã sinh viên, Họ và tên, Lớp học, GPA, và Huy hiệu xếp loại học lực.
+   - Thanh tìm kiếm đa năng: Tìm kiếm theo **Mã sinh viên** hoặc **Họ tên** sinh viên với kết quả cập nhật ngay lập tức.
+   - Bộ lọc phân loại nhanh theo học lực (Tất cả, Giỏi, Khá, Trung bình, Yếu) kèm số lượng sinh viên thống kê.
+   - Nhấn vào sinh viên để chuyển sang màn hình Chi tiết.
+   - Nút **+ Thêm mới** để chuyển sang màn hình Thêm sinh viên.
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+2. **Màn hình Chi tiết Sinh viên (`StudentDetailScreen`)**:
+   - Hiển thị toàn bộ thông tin cá nhân và học vụ:
+     - Mã sinh viên, Họ và tên, Giới tính, Ngày sinh.
+     - Email, Số điện thoại.
+     - Lớp học phần, Khoa/Viện, Trạng thái học tập.
+     - Điểm GPA và Xếp loại học lực nổi bật.
+   - Nút **Chỉnh sửa**: Chuyển sang màn hình Chỉnh sửa thông tin sinh viên.
+   - Nút **Xóa sinh viên**: Hiển thị hộp thoại xác nhận (`Alert.alert`). Khi xác nhận xóa, sinh viên được gỡ bỏ khỏi hệ thống và ứng dụng tự động quay lại danh sách.
 
-```sh
-# Using npm
-npm start
+3. **Màn hình Thêm Sinh viên (`StudentAddScreen`)**:
+   - Form nhập liệu trực quan với các trường: Mã sinh viên, Họ và tên, Ngày sinh (DD/MM/YYYY), Giới tính (Nam/Nữ/Khác), Email, Số điện thoại, Lớp, Khoa/Viện, Điểm trung bình (GPA).
+   - Kiểm tra dữ liệu (Validation) chặt chẽ:
+     - Không để trống các trường thông tin bắt buộc.
+     - Kiểm tra không trùng lặp Mã sinh viên với dữ liệu hiện có.
+     - Kiểm tra định dạng Email và Số điện thoại (10 chữ số).
+     - Kiểm tra GPA trong thang điểm từ `0.0` đến `10.0`.
+   - Hiển thị xếp loại dự kiến thời gian thực ngay khi nhập điểm GPA.
+   - Sau khi thêm thành công, tự động cập nhật danh sách và điều hướng về trang chủ.
 
-# OR using Yarn
-yarn start
+4. **Màn hình Chỉnh sửa Sinh viên (`StudentEditScreen`)**:
+   - Tự động điền dữ liệu hiện tại của sinh viên vào các trường form.
+   - Cho phép chỉnh sửa toàn diện với validation đảm bảo tính toàn vẹn dữ liệu.
+   - Sau khi lưu thay đổi, dữ liệu được cập nhật ngay lập tức vào danh sách sinh viên.
+
+---
+
+## 🎯 Quy tắc Xếp loại Học lực (GPA)
+
+Xếp loại sinh viên được tự động tính toán dựa trên điểm trung bình tích lũy GPA (thang 10):
+- **GPA ≥ 8.5**: Xếp loại **Giỏi** (Huy hiệu màu Xanh ngọc lục bảo)
+- **GPA ≥ 7.0**: Xếp loại **Khá** (Huy hiệu màu Xanh dương)
+- **GPA ≥ 5.0**: Xếp loại **Trung bình** (Huy hiệu màu Vàng cam)
+- **GPA < 5.0**: Xếp loại **Yếu** (Huy hiệu màu Đỏ hồng)
+
+---
+
+## 🛠️ Công nghệ & Kỹ thuật Áp dụng
+
+- **React Native 0.87 & React 19**
+- **React Navigation (`@react-navigation/native-stack`)**: Điều hướng mượt mà giữa 4 màn hình.
+- **Quản lý trạng thái bằng `useState`**: Đóng gói trong `StudentProvider` (`StudentContext`) chia sẻ trạng thái tập trung và phản ứng tức thì.
+- **`FlatList`**: Tối ưu hiển thị danh sách lớn, hỗ trợ Empty State khi không có kết quả tìm kiếm.
+- **`TextInput` & `KeyboardAvoidingView`**: Giao diện nhập liệu thân thiện trên cả iOS và Android, tự động căn chỉnh bàn phím.
+- **Component dùng chung**:
+  - `Header`: Tiêu đề kèm nút quay lại và nút thao tác nhanh.
+  - `CustomInput`: Ô nhập liệu có nhãn, dấu bắt buộc, báo lỗi viền đỏ trực quan, nút xóa nhanh nội dung.
+  - `CustomButton`: Nút bấm với nhiều biến thể màu (primary, danger, outline), kích thước và trạng thái loading.
+  - `StudentCard`: Thẻ sinh viên tinh tế với avatar chữ cái đầu và hiệu ứng đổ bóng.
+  - `RankBadge`: Huy hiệu xếp loại với chấm tròn và màu sắc theo chuẩn.
+  - `EmptyState`: Trạng thái trống sinh động khi tìm kiếm hoặc danh sách rỗng.
+
+---
+
+## 🚀 Hướng dẫn Cài đặt & Khởi chạy
+
+### 1. Cài đặt dependencies
+```bash
+npm install
 ```
 
-## Step 2: Build and run your app
-
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
+### 2. Cài đặt Pods (Dành cho iOS trên macOS)
+```bash
+bundle exec pod install --project-directory=ios
 ```
 
-### iOS
+### 3. Khởi chạy ứng dụng
+- **Chạy dev server Metro**:
+  ```bash
+  npm start
+  ```
+- **Chạy trên iOS Simulator**:
+  ```bash
+  npm run ios
+  ```
+- **Chạy trên Android Emulator**:
+  ```bash
+  npm run android
+  ```
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
+### 4. Chạy kiểm thử tự động (Unit Tests)
+```bash
+npm test
 ```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
-
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
-
-## Step 3: Modify your app
-
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+Toàn bộ unit test cho logic xếp loại, validation form và render root App đều vượt qua 100%.
