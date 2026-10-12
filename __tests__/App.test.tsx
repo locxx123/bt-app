@@ -4,6 +4,7 @@
 
 import React from 'react';
 import ReactTestRenderer from 'react-test-renderer';
+import { Text } from 'react-native';
 import App from '../App';
 
 // Proper mock for react-native-safe-area-context
@@ -13,7 +14,11 @@ jest.mock('react-native-safe-area-context', () => {
   const SafeAreaInsetsContext = React.createContext(inset);
   return {
     SafeAreaProvider: ({ children }: { children: React.ReactNode }) => children,
-    SafeAreaConsumer: ({ children }: { children: (insets: any) => React.ReactNode }) => children(inset),
+    SafeAreaConsumer: ({
+      children,
+    }: {
+      children: (insets: any) => React.ReactNode;
+    }) => children(inset),
     useSafeAreaInsets: () => inset,
     SafeAreaInsetsContext,
   };
@@ -38,10 +43,23 @@ jest.mock('react-native-screens', () => {
   };
 });
 
-test('renders app root correctly', async () => {
-  let tree: any;
+test('renders dashboard with student info after loading data', async () => {
+  let tree: ReactTestRenderer.ReactTestRenderer | undefined;
   await ReactTestRenderer.act(async () => {
     tree = ReactTestRenderer.create(<App />);
   });
-  expect(tree).toBeDefined();
+  // Chờ AsyncStorage đọc dữ liệu xong
+  await ReactTestRenderer.act(async () => {
+    await new Promise<void>(resolve => setTimeout(resolve, 0));
+  });
+
+  const texts = tree!.root
+    .findAllByType(Text)
+    .map(node => [].concat(node.props.children).join(''));
+  expect(texts).toContain('Vũ Tiến Lộc');
+  expect(texts).toContain('Lịch học hôm nay');
+
+  await ReactTestRenderer.act(async () => {
+    tree!.unmount();
+  });
 });

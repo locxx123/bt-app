@@ -1,5 +1,5 @@
 /**
- * Quản lý sinh viên - React Native Application
+ * Quản lý học tập - React Native Application
  *
  * @format
  */
@@ -7,17 +7,17 @@
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
-import { StudentProvider } from './src/context/StudentContext';
-import { AppNavigator } from './src/navigation/AppNavigator';
+import { StudyProvider } from './src/context/StudyContext';
+import { StudyNavigator } from './src/navigation/StudyNavigator';
 
 function App() {
   return (
     <SafeAreaProvider>
-      <StudentProvider>
+      <StudyProvider>
         <NavigationContainer>
-          <AppNavigator />
+          <StudyNavigator />
         </NavigationContainer>
-      </StudentProvider>
+      </StudyProvider>
     </SafeAreaProvider>
   );
 }

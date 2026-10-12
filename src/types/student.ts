@@ -17,8 +17,12 @@ export interface Student {
 }
 
 export type RootStackParamList = {
-  StudentList: undefined;
-  StudentDetail: { studentId: string };
-  StudentAdd: undefined;
-  StudentEdit: { studentId: string };
+  login: undefined;
+  home: undefined;
+  setting: undefined;
+  // StudentList: undefined;
+  // StudentDetail: { studentId: string };
+  // StudentAdd: undefined;
+  // StudentEdit: { studentId: string };
+  // Excercise: undefined;
 };
