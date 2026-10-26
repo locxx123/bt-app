@@ -7,3 +7,7 @@ jest.mock('@react-native-vector-icons/ionicons', () => {
   const { Text } = require('react-native');
   return { Ionicons: Text };
 });
+
+jest.mock('@react-native-community/netinfo', () =>
+  require('@react-native-community/netinfo/jest/netinfo-mock'),
+);
